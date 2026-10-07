@@ -1,0 +1,375 @@
+{
+  "mappings": [
+    {
+      "port": 80,
+      "protocol": "TCP",
+      "name": "HTTP",
+      "category": "Web",
+      "description": "Hypertext Transfer Protocol (Unencrypted Web)"
+    },
+    {
+      "port": 443,
+      "protocol": "TCP",
+      "name": "HTTPS",
+      "category": "Web",
+      "description": "Hypertext Transfer Protocol Secure (TLS/SSL Encrypted Web)"
+    },
+    {
+      "port": 443,
+      "protocol": "UDP",
+      "name": "HTTP/3 (QUIC)",
+      "category": "Web",
+      "description": "HTTP/3 Quick UDP Internet Connections (Modern Web & YouTube)"
+    },
+    {
+      "port": 8080,
+      "protocol": "TCP",
+      "name": "HTTP-Alt",
+      "category": "Web",
+      "description": "Alternative HTTP port commonly used for web caches and dev servers"
+    },
+    {
+      "port": 8443,
+      "protocol": "TCP",
+      "name": "HTTPS-Alt",
+      "category": "Web",
+      "description": "Alternative HTTPS / Tomcat / Admin Web Portal"
+    },
+    {
+      "port": 3128,
+      "protocol": "TCP",
+      "name": "Squid Proxy",
+      "category": "Web",
+      "description": "Squid Web Caching Proxy server widely used in campus networks"
+    },
+    {
+      "port": 8000,
+      "protocol": "TCP",
+      "name": "HTTP-Dev",
+      "category": "Web",
+      "description": "Common development web server port (Django, Python http.server)"
+    },
+    {
+      "port": 5000,
+      "protocol": "TCP",
+      "name": "Flask / Node App",
+      "category": "Web",
+      "description": "Common development server port for Flask and internal services"
+    },
+    {
+      "port": 25,
+      "protocol": "TCP",
+      "name": "SMTP",
+      "category": "Email",
+      "description": "Simple Mail Transfer Protocol (MTA server-to-server relay)"
+    },
+    {
+      "port": 465,
+      "protocol": "TCP",
+      "name": "SMTPS",
+      "category": "Email",
+      "description": "Secure SMTP over SSL wrapper for email submission"
+    },
+    {
+      "port": 587,
+      "protocol": "TCP",
+      "name": "SMTP Submission",
+      "category": "Email",
+      "description": "Standard authenticated email submission with STARTTLS"
+    },
+    {
+      "port": 110,
+      "protocol": "TCP",
+      "name": "POP3",
+      "category": "Email",
+      "description": "Post Office Protocol v3 for unencrypted email retrieval"
+    },
+    {
+      "port": 995,
+      "protocol": "TCP",
+      "name": "POP3S",
+      "category": "Email",
+      "description": "Post Office Protocol v3 over TLS/SSL encryption"
+    },
+    {
+      "port": 143,
+      "protocol": "TCP",
+      "name": "IMAP",
+      "category": "Email",
+      "description": "Internet Message Access Protocol for email sync"
+    },
+    {
+      "port": 993,
+      "protocol": "TCP",
+      "name": "IMAPS",
+      "category": "Email",
+      "description": "Internet Message Access Protocol over TLS/SSL encryption"
+    },
+    {
+      "port": 20,
+      "protocol": "TCP",
+      "name": "FTP-Data",
+      "category": "File Transfer",
+      "description": "File Transfer Protocol (Active Data Channel)"
+    },
+    {
+      "port": 21,
+      "protocol": "TCP",
+      "name": "FTP-Control",
+      "category": "File Transfer",
+      "description": "File Transfer Protocol (Command/Control Channel - Insecure)"
+    },
+    {
+      "port": 22,
+      "protocol": "TCP",
+      "name": "SSH / SFTP",
+      "category": "Remote Access",
+      "description": "Secure Shell remote terminal and SFTP encrypted file transfer"
+    },
+    {
+      "port": 23,
+      "protocol": "TCP",
+      "name": "Telnet",
+      "category": "Remote Access",
+      "description": "Legacy unencrypted remote terminal protocol (Security Risk)"
+    },
+    {
+      "port": 69,
+      "protocol": "UDP",
+      "name": "TFTP",
+      "category": "File Transfer",
+      "description": "Trivial File Transfer Protocol used for PXE network booting & routers"
+    },
+    {
+      "port": 137,
+      "protocol": "UDP",
+      "name": "NetBIOS-NS",
+      "category": "File Transfer",
+      "description": "NetBIOS Name Service for Windows network discovery"
+    },
+    {
+      "port": 138,
+      "protocol": "UDP",
+      "name": "NetBIOS-DGM",
+      "category": "File Transfer",
+      "description": "NetBIOS Datagram Service for Windows file sharing"
+    },
+    {
+      "port": 139,
+      "protocol": "TCP",
+      "name": "NetBIOS-SSN",
+      "category": "File Transfer",
+      "description": "NetBIOS Session Service for legacy Windows file sharing"
+    },
+    {
+      "port": 445,
+      "protocol": "TCP",
+      "name": "SMB / CIFS",
+      "category": "File Transfer",
+      "description": "Server Message Block for Windows network file & printer sharing"
+    },
+    {
+      "port": 3389,
+      "protocol": "TCP",
+      "name": "RDP",
+      "category": "Remote Access",
+      "description": "Microsoft Remote Desktop Protocol for graphical desktop access"
+    },
+    {
+      "port": 5900,
+      "protocol": "TCP",
+      "name": "VNC",
+      "category": "Remote Access",
+      "description": "Virtual Network Computing remote frame buffer display"
+    },
+    {
+      "port": 5901,
+      "protocol": "TCP",
+      "name": "VNC-1",
+      "category": "Remote Access",
+      "description": "Virtual Network Computing display :1"
+    },
+    {
+      "port": 53,
+      "protocol": "UDP",
+      "name": "DNS",
+      "category": "Network Services",
+      "description": "Domain Name System standard queries (UDP)"
+    },
+    {
+      "port": 53,
+      "protocol": "TCP",
+      "name": "DNS Zone Transfer",
+      "category": "Network Services",
+      "description": "Domain Name System large responses or zone transfers (TCP)"
+    },
+    {
+      "port": 67,
+      "protocol": "UDP",
+      "name": "DHCP Server",
+      "category": "Network Services",
+      "description": "Bootstrap Protocol / DHCP Server listening port"
+    },
+    {
+      "port": 68,
+      "protocol": "UDP",
+      "name": "DHCP Client",
+      "category": "Network Services",
+      "description": "Bootstrap Protocol / DHCP Client listening port"
+    },
+    {
+      "port": 123,
+      "protocol": "UDP",
+      "name": "NTP",
+      "category": "Network Services",
+      "description": "Network Time Protocol for clock synchronization"
+    },
+    {
+      "port": 161,
+      "protocol": "UDP",
+      "name": "SNMP",
+      "category": "Network Services",
+      "description": "Simple Network Management Protocol for router/switch monitoring"
+    },
+    {
+      "port": 162,
+      "protocol": "UDP",
+      "name": "SNMP Trap",
+      "category": "Network Services",
+      "description": "SNMP Trap receiver for network equipment event alarms"
+    },
+    {
+      "port": 389,
+      "protocol": "TCP",
+      "name": "LDAP",
+      "category": "Network Services",
+      "description": "Lightweight Directory Access Protocol for directory lookups"
+    },
+    {
+      "port": 636,
+      "protocol": "TCP",
+      "name": "LDAPS",
+      "category": "Network Services",
+      "description": "Lightweight Directory Access Protocol over TLS/SSL"
+    },
+    {
+      "port": 1812,
+      "protocol": "UDP",
+      "name": "RADIUS Auth",
+      "category": "Campus-Specific",
+      "description": "RADIUS Authentication server for Eduroam / 802.1X Wi-Fi login"
+    },
+    {
+      "port": 1813,
+      "protocol": "UDP",
+      "name": "RADIUS Acct",
+      "category": "Campus-Specific",
+      "description": "RADIUS Accounting server for session tracking on campus networks"
+    },
+    {
+      "port": 88,
+      "protocol": "TCP",
+      "name": "Kerberos",
+      "category": "Campus-Specific",
+      "description": "Kerberos Network Authentication Protocol (Single Sign-On / Active Directory)"
+    },
+    {
+      "port": 88,
+      "protocol": "UDP",
+      "name": "Kerberos",
+      "category": "Campus-Specific",
+      "description": "Kerberos Ticket Granting Service over UDP"
+    },
+    {
+      "port": 3306,
+      "protocol": "TCP",
+      "name": "MySQL",
+      "category": "Database",
+      "description": "MySQL / MariaDB database server connection"
+    },
+    {
+      "port": 5432,
+      "protocol": "TCP",
+      "name": "PostgreSQL",
+      "category": "Database",
+      "description": "PostgreSQL database server connection"
+    },
+    {
+      "port": 1521,
+      "protocol": "TCP",
+      "name": "Oracle DB",
+      "category": "Database",
+      "description": "Oracle Database listener service"
+    },
+    {
+      "port": 1433,
+      "protocol": "TCP",
+      "name": "MS-SQL",
+      "category": "Database",
+      "description": "Microsoft SQL Server database listener"
+    },
+    {
+      "port": 27017,
+      "protocol": "TCP",
+      "name": "MongoDB",
+      "category": "Database",
+      "description": "MongoDB NoSQL document database listener"
+    },
+    {
+      "port": 6379,
+      "protocol": "TCP",
+      "name": "Redis",
+      "category": "Database",
+      "description": "Redis in-memory key-value cache and message broker"
+    },
+    {
+      "port": 5060,
+      "protocol": "UDP",
+      "name": "SIP",
+      "category": "Streaming/VoIP",
+      "description": "Session Initiation Protocol for campus IP phones & VoIP"
+    },
+    {
+      "port": 5060,
+      "protocol": "TCP",
+      "name": "SIP (TCP)",
+      "category": "Streaming/VoIP",
+      "description": "Session Initiation Protocol over TCP"
+    },
+    {
+      "port": 5061,
+      "protocol": "TCP",
+      "name": "SIP-TLS",
+      "category": "Streaming/VoIP",
+      "description": "Encrypted Session Initiation Protocol for secure voice calls"
+    },
+    {
+      "port": 1935,
+      "protocol": "TCP",
+      "name": "RTMP",
+      "category": "Streaming/VoIP",
+      "description": "Real-Time Messaging Protocol for live lecture video streaming"
+    },
+    {
+      "port": 3478,
+      "protocol": "UDP",
+      "name": "STUN",
+      "category": "Streaming/VoIP",
+      "description": "Session Traversal Utilities for NAT (WebRTC / Zoom / Teams)"
+    },
+    {
+      "port": 3478,
+      "protocol": "TCP",
+      "name": "STUN (TCP)",
+      "category": "Streaming/VoIP",
+      "description": "STUN over TCP for WebRTC peer-to-peer connection establishment"
+    },
+    {
+      "port": 5004,
+      "protocol": "UDP",
+      "name": "RTP",
+      "category": "Streaming/VoIP",
+      "description": "Real-time Transport Protocol media stream for voice and video"
+    }
+  ]
+}
