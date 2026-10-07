@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniPort Monitor - University Network Port & Traffic Analyzer</title>
+  <meta name="description" content="Real-time transport layer port-based communication monitor and application identifier for campus networks.">
+  
+  <!-- Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Custom Stylesheet (Relative Path for GitHub Pages compatibility) -->
+  <link rel="stylesheet" href="./static/css/style.css">
+</head>
+<body>
+  <!-- Header / Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand-section">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+            <line x1="6" y1="6" x2="6.01" y2="6"></line>
+            <line x1="6" y1="18" x2="6.01" y2="18"></line>
+            <path d="M10 6h8"></path>
+            <path d="M10 18h8"></path>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-title-wrap">
+            <h1 class="brand-title">UniPort Monitor</h1>
+            <span class="badge-tag">NOC v1.0</span>
+          </div>
+          <p class="brand-subtitle">Campus Network Transport-Layer Port & Application Analyzer</p>
+        </div>
+      </div>
+
+      <!-- Controls & Engine Status -->
+      <div class="nav-actions">
+        <!-- Live / Demo Mode Selector -->
+        <div class="mode-toggle-group">
+          <button id="btn-mode-demo" class="btn-mode active" title="Switch to Demo Simulation Mode">
+            <span class="dot-indicator"></span> Demo
+          </button>
+          <button id="btn-mode-live" class="btn-mode" title="Switch to Live Packet Sniffing (Scapy)">
+            <span class="dot-indicator"></span> Live
+          </button>
+        </div>
+
+        <!-- Interface Selector (for Live Mode) -->
+        <div id="interface-select-wrap" class="interface-wrap hidden">
+          <select id="select-interface" class="control-select" aria-label="Network Interface">
+            <option value="default">Default Interface</option>
+          </select>
+        </div>
+
+        <!-- Play/Pause Control -->
+        <button id="btn-toggle-capture" class="btn btn-primary" title="Pause or Resume Monitoring">
+          <span id="capture-icon" class="btn-icon">⏸</span>
+          <span id="capture-label">Pause</span>
+        </button>
+
+        <!-- Clear Data -->
+        <button id="btn-clear-data" class="btn btn-secondary" title="Clear all packet records">
+          <span class="btn-icon">🗑️</span> Clear
+        </button>
+
+        <!-- Theme Toggle -->
+        <button id="btn-theme-toggle" class="btn btn-icon-only" title="Toggle Dark / Light Theme" aria-label="Toggle Theme">
+          <span id="theme-icon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Live Status Bar -->
+  <div class="status-banner">
+    <div class="status-banner-inner">
+      <div class="live-pill">
+        <span class="pulse-dot"></span>
+        <span id="status-mode-text">DEMO MODE (Simulated Campus Traffic)</span>
+      </div>
+      <div class="status-meta">
+        <span>Engine: <strong id="engine-status">Running</strong></span>
+        <span class="sep">•</span>
+        <span>Throughput: <strong id="header-pps">0 pkt/s</strong></span>
+        <span class="sep">•</span>
+        <span>Auto-refresh: <strong>1.0s</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Dashboard Container -->
+  <main class="dashboard-container">
+
+    <!-- Section 1: Summary Metric Cards -->
+    <section class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-header">
+          <span class="metric-label">Total Packets</span>
+          <div class="metric-icon icon-blue">📦</div>
+        </div>
+        <div class="metric-value" id="stat-total-packets">0</div>
+        <div class="metric-footer">Captured in session</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-header">
+          <span class="metric-label">Active Connections</span>
+          <div class="metric-icon icon-cyan">🌐</div>
+        </div>
+        <div class="metric-value" id="stat-active-conns">0</div>
+        <div class="metric-footer">Unique flows (last 60s)</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-header">
+          <span class="metric-label">Identified Apps</span>
+          <div class="metric-icon icon-purple">⚡</div>
+        </div>
+        <div class="metric-value" id="stat-unique-apps">0</div>
+        <div class="metric-footer">Distinct applications</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-header">
+          <span class="metric-label">Protocols (TCP / UDP)</span>
+          <div class="metric-icon icon-green">📊</div>
+        </div>
+        <div class="metric-value font-split">
+          <span class="tcp-text" id="stat-tcp-count">0</span>
+          <span class="slash">/</span>
+          <span class="udp-text" id="stat-udp-count">0</span>
+        </div>
+        <div class="metric-footer">
+          <span class="badge-mini badge-tcp">TCP</span> vs <span class="badge-mini badge-udp">UDP</span>
+        </div>
+      </div>
+
+      <div class="metric-card warning-card">
+        <div class="metric-header">
+          <span class="metric-label">Unknown Ports</span>
+          <div class="metric-icon icon-amber">⚠️</div>
+        </div>
+        <div class="metric-value amber-text" id="stat-unknown-count">0</div>
+        <div class="metric-footer">Flagged for review</div>
+      </div>
+    </section>
+
+    <!-- Section 2: Charts Row -->
+    <section class="charts-grid">
+      <!-- Doughnut Chart: Traffic by Category -->
+      <div class="card chart-card">
+        <div class="card-header">
+          <div class="card-header-title">
+            <h3>Traffic by Category</h3>
+            <p>Application protocol classification</p>
+          </div>
+        </div>
+        <div class="chart-canvas-wrap">
+          <canvas id="chart-categories"></canvas>
+        </div>
+      </div>
+
+      <!-- Bar Chart: Top 10 Applications -->
+      <div class="card chart-card">
+        <div class="card-header">
+          <div class="card-header-title">
+            <h3>Top 10 Applications</h3>
+            <p>Most active services by packet volume</p>
+          </div>
+        </div>
+        <div class="chart-canvas-wrap">
+          <canvas id="chart-top-apps"></canvas>
+        </div>
+      </div>
+
+      <!-- Line Chart: Throughput Packets/Sec -->
+      <div class="card chart-card">
+        <div class="card-header">
+          <div class="card-header-title">
+            <h3>Traffic Throughput (60s)</h3>
+            <p>Packets captured per second</p>
+          </div>
+        </div>
+        <div class="chart-canvas-wrap">
+          <canvas id="chart-throughput"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Utility Row (Port Lookup Tool & Security Alerts) -->
+    <section class="split-tools-grid">
+      <!-- Port Lookup Tool -->
+      <div class="card tool-card">
+        <div class="card-header">
+          <div class="card-header-title">
+            <h3>🔍 Port Lookup Tool</h3>
+            <p>Instant transport port identification & service info</p>
+          </div>
+        </div>
+        <div class="lookup-body">
+          <div class="lookup-input-group">
+            <input type="number" id="lookup-port-input" placeholder="Enter port (e.g. 443, 1812, 3306, 22)..." min="1" max="65535" class="control-input">
+            <select id="lookup-proto-select" class="control-select">
+              <option value="">Any Proto</option>
+              <option value="TCP">TCP</option>
+              <option value="UDP">UDP</option>
+            </select>
+            <button id="btn-do-lookup" class="btn btn-primary">Lookup</button>
+          </div>
+
+          <div id="lookup-result-box" class="lookup-result-box">
+            <div class="lookup-placeholder">
+              Type a port number above to inspect its standard name, category, and protocol description.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Real-Time Alerts Panel -->
+      <div class="card alerts-card">
+        <div class="card-header">
+          <div class="card-header-title">
+            <h3>🛡️ Security & Anomaly Alerts</h3>
+            <p>Insecure protocols (Telnet/FTP), port scans & unknown ports</p>
+          </div>
+          <span class="alerts-count-badge" id="alerts-count-badge">0 Alerts</span>
+        </div>
+        <div class="alerts-feed" id="alerts-feed">
+          <div class="empty-alerts">No alerts triggered yet. System nominal.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Live Connections Table & Filters -->
+    <section class="card table-card">
+      <div class="card-header table-header-flex">
+        <div class="card-header-title">
+          <h3>Live Connection Monitor</h3>
+          <p>Real-time packet flow stream (newest 200 packets)</p>
+        </div>
+        <div class="table-actions">
+          <button id="btn-export-csv" class="btn btn-secondary">
+            <span>📥</span> Download CSV
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters Row -->
+      <div class="filters-bar">
+        <div class="filter-item search-filter">
+          <span class="filter-icon">🔎</span>
+          <input type="text" id="filter-search" class="control-input search-input" placeholder="Search IP, port, app name...">
+        </div>
+
+        <div class="filter-item">
+          <label for="filter-protocol">Protocol:</label>
+          <select id="filter-protocol" class="control-select">
+            <option value="">All</option>
+            <option value="TCP">TCP</option>
+            <option value="UDP">UDP</option>
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <label for="filter-category">Category:</label>
+          <select id="filter-category" class="control-select">
+            <option value="">All Categories</option>
+            <option value="Web">Web</option>
+            <option value="Campus-Specific">Campus-Specific</option>
+            <option value="Network Services">Network Services</option>
+            <option value="Remote Access">Remote Access</option>
+            <option value="Database">Database</option>
+            <option value="Email">Email</option>
+            <option value="File Transfer">File Transfer</option>
+            <option value="Streaming/VoIP">Streaming/VoIP</option>
+            <option value="Unknown">Unknown</option>
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <label for="filter-port">Port:</label>
+          <input type="number" id="filter-port" class="control-input small-input" placeholder="e.g. 443" min="1" max="65535">
+        </div>
+
+        <button id="btn-reset-filters" class="btn btn-ghost" title="Reset all filters">Reset</button>
+      </div>
+
+      <!-- Connections Table Container -->
+      <div class="table-scroll-container">
+        <table class="connections-table" id="connections-table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Source IP</th>
+              <th>Src Port</th>
+              <th>Destination IP</th>
+              <th>Dst Port</th>
+              <th>Protocol</th>
+              <th>Application</th>
+              <th>Category</th>
+              <th>Size</th>
+            </tr>
+          </thead>
+          <tbody id="connections-tbody">
+            <tr class="empty-state-row">
+              <td colspan="9">
+                <div class="empty-table-state">
+                  <span class="loader-spinner"></span>
+                  <span>Waiting for network traffic...</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-footer-bar">
+        <span id="table-row-count">Showing 0 connections</span>
+        <span class="table-hint">Auto-updates in real-time</span>
+      </div>
+    </section>
+
+    <!-- Section 5: Educational Info / Viva Cheat Sheet Footer -->
+    <footer class="footer-educational">
+      <div class="edu-card">
+        <h4>🎓 UniPort Viva Quick Reference</h4>
+        <div class="edu-grid">
+          <div class="edu-item">
+            <strong>Port Number Ranges:</strong>
+            <p>Well-Known (0-1023), Registered (1024-49151), Dynamic/Ephemeral (49152-65535).</p>
+          </div>
+          <div class="edu-item">
+            <strong>Resolution Logic:</strong>
+            <p>Maps transport layer ports to applications using <code>ports.json</code>. Prioritizes lower server ports over ephemeral client ports.</p>
+          </div>
+          <div class="edu-item">
+            <strong>Security Rules:</strong>
+            <p>Monitors plaintext services (Telnet/FTP), unknown high ports, and rapid port scan fanouts (&gt;20 ports in 10s).</p>
+          </div>
+          <div class="edu-item">
+            <strong>Privacy & Ethics:</strong>
+            <p>Inspects headers only (IPs, Ports, Size). Never decodes or stores user payloads. Use only on authorized networks.</p>
+          </div>
+        </div>
+      </div>
+      <p class="copyright">UniPort Monitor &copy; 2026. Built for University Network Operations & Computer Networks Lab Demonstration.</p>
+    </footer>
+  </main>
+
+  <!-- Application Logic (Relative Path for GitHub Pages compatibility) -->
+  <script src="./static/js/app.js"></script>
+</body>
+</html>
